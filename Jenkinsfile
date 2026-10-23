@@ -10,5 +10,10 @@ pipeline {
                 sh 'ls -l'
             }
         }
+        stage("Create Docker Hub Repository") {
+            steps {
+                echo "Preparing Docker Hub repository"
+            }
+        }
     }
 }
