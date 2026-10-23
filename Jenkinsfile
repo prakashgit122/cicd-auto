@@ -20,6 +20,28 @@ pipeline {
                 sh 'docker build -t dockerp11/cicd-auto:lates .'
             }
         }
+        stage("Docker Push") {
+            steps {
+               withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-creds',
+                usernameVariable: 'DOCKERHUB_USERNAME',
+                passwordVariable: 'DOCKERHUB_TOKEN'
+            )
+        ]) {
+            sh '''
+                set +x
+                echo "$DOCKERHUB_TOKEN" | docker login \
+                    --username "$DOCKERHUB_USERNAME" \
+                    --password-stdin
+
+                docker push dockerp11/cicd-auto:latest
+
+                docker logout
+            ''' 
+                }
+            }
+        }
             
     }
 }
